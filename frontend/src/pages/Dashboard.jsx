@@ -1,17 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import API from "../services/api";
 import {
-  Search, Plus, Filter, MoreVertical, Clock, Phone, CheckCircle2,
-  X, User, Briefcase, AlertCircle
+  Plus, Clock, Phone, CheckCircle2,
+  X, User, Briefcase, AlertCircle, ChevronRight
 } from "lucide-react";
 import LeadStatusChart from "../components/LeadStatusChart";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [leads, setLeads] = useState([]);
   const [agents, setAgents] = useState([]);
   const [filter, setFilter] = useState("All");
-  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -36,12 +37,9 @@ export default function Dashboard() {
   const filteredLeads = useMemo(() => {
     return leads.filter((lead) => {
       const matchFilter = filter === "All" || lead.status === filter;
-      const matchSearch =
-        lead.name?.toLowerCase().includes(search.toLowerCase()) ||
-        lead.source?.toLowerCase().includes(search.toLowerCase());
-      return matchFilter && matchSearch;
+      return matchFilter;
     });
-  }, [leads, filter, search]);
+  }, [leads, filter]);
 
   const stats = {
     new: leads.filter((l) => l.status === "New").length,
@@ -52,10 +50,16 @@ export default function Dashboard() {
   if (loading) {
     return (
       <Layout>
-        <div className="flex items-center justify-center min-h-[80vh]">
-          <div className="animate-pulse text-lg font-medium text-brand-600">
-            Loading dashboard...
-          </div>
+        <div className="flex justify-center items-center min-h-[60vh]">
+           <div className="glass-card px-8 py-6 flex flex-col items-center gap-4 border border-white/60 shadow-lg animate-in zoom-in-95 duration-500">
+             <div className="relative">
+                <div className="w-12 h-12 border-4 border-brand-100 rounded-full"></div>
+                <div className="w-12 h-12 border-4 border-brand-600 rounded-full border-t-transparent animate-spin absolute top-0 left-0"></div>
+             </div>
+             <div className="text-brand-700 font-bold bg-brand-50 px-4 py-1.5 rounded-full border border-brand-100 shadow-sm animate-pulse">
+               Loading Dashboard...
+             </div>
+           </div>
         </div>
       </Layout>
     );
@@ -71,31 +75,21 @@ export default function Dashboard() {
           </div>
 
           <div className="flex items-center gap-3 w-full md:w-auto">
-            <div className="relative flex-1 md:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search leads..."
-                className="w-full pl-10 pr-4 py-2.5 border border-white/60 bg-white/40 backdrop-blur-md rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 text-sm font-semibold shadow-[0_4px_14px_0_rgb(99,102,241,0.39)] hover:shadow-[0_6px_20px_rgba(99,102,241,0.23)] hover:-translate-y-0.5 transition-all duration-200 shrink-0"
+              className="bg-brand-600 cursor-pointer hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 text-sm font-semibold shadow-[0_4px_14px_0_rgb(99,102,241,0.39)] hover:shadow-[0_6px_20px_rgba(99,102,241,0.23)] hover:-translate-y-0.5 transition-all duration-200 shrink-0"
             >
               <Plus size={18} />
-              <span className="hidden sm:inline">Add Lead</span>
+              <span className="hidden sm:inline ">Add Lead</span>
             </button>
           </div>
         </div>
 
         {/* STATS */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <StatCard title="New Leads" value={stats.new} icon={<Clock />} color="text-amber-500" bg="bg-amber-50" />
-          <StatCard title="Contacted" value={stats.contacted} icon={<Phone />} color="text-brand-500" bg="bg-brand-50" />
-          <StatCard title="Qualified" value={stats.qualified} icon={<CheckCircle2 />} color="text-emerald-500" bg="bg-emerald-50" />
+          <StatCard title="New Leads" value={stats.new} icon={<Clock />} color="text-amber-500" bg="bg-amber-50" linkTo="/status/New" />
+          <StatCard title="Contacted" value={stats.contacted} icon={<Phone />} color="text-brand-500" bg="bg-brand-50" linkTo="/status/Contacted" />
+          <StatCard title="Qualified" value={stats.qualified} icon={<CheckCircle2 />} color="text-emerald-500" bg="bg-emerald-50" linkTo="/status/Qualified" />
         </div>
 
         {/* CHART + SUMMARY */}
@@ -128,7 +122,7 @@ export default function Dashboard() {
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
-                  className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
+                  className={`px-4 py-1.5 cursor-pointer rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
                     filter === f
                       ? "bg-white text-brand-600 shadow-sm"
                       : "text-gray-500 hover:text-gray-900 hover:bg-white/40"
@@ -153,7 +147,11 @@ export default function Dashboard() {
               <tbody className="divide-y divide-white/40">
                 {filteredLeads.length > 0 ? (
                   filteredLeads.map((lead) => (
-                    <tr key={lead._id} className="hover:bg-white/50 transition-colors group">
+                    <tr 
+                      key={lead.id || lead._id} 
+                      onClick={() => navigate(`/leads/${lead.id || lead._id}`)}
+                      className="hover:bg-white/50 transition-all group cursor-pointer"
+                    >
                       <td className="px-6 py-4">
                         <div className="font-semibold text-gray-900">{lead.name}</div>
                         <div className="text-xs text-gray-500 mt-0.5">{lead.source || "Direct"}</div>
@@ -170,9 +168,10 @@ export default function Dashboard() {
                         <StatusBadge status={lead.status} />
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <button className="p-2 text-gray-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
-                          <MoreVertical size={18} />
-                        </button>
+                         <div className="inline-flex items-center gap-1.5 px-3 py-1.5 text-gray-400 group-hover:text-brand-600 group-hover:bg-brand-50 rounded-xl transition-all font-semibold text-sm">
+                            <span className="opacity-0 group-hover:opacity-100 transition-opacity translate-x-2 group-hover:translate-x-0 hidden sm:inline-block">View Details</span>
+                            <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                         </div>
                       </td>
                     </tr>
                   ))
@@ -197,9 +196,9 @@ export default function Dashboard() {
   );
 }
 
-function StatCard({ title, value, icon, color, bg }) {
-  return (
-    <div className="glass-card p-6 flex flex-col justify-between hover:-translate-y-1 transition-all">
+function StatCard({ title, value, icon, color, bg, linkTo }) {
+  const content = (
+    <div className={`glass-card p-6 flex flex-col justify-between transition-all h-full ${linkTo ? 'hover:-translate-y-1 hover:shadow-lg hover:border-brand-200' : ''}`}>
       <div className="flex justify-between items-start mb-4">
         <span className="text-sm font-semibold text-gray-500 tracking-wide">{title}</span>
         <div className={`p-3 rounded-2xl ${bg} ${color}`}>
@@ -209,6 +208,7 @@ function StatCard({ title, value, icon, color, bg }) {
       <h2 className="text-4xl font-extrabold text-gray-900">{value}</h2>
     </div>
   );
+  return linkTo ? <Link to={linkTo} className="block h-full">{content}</Link> : content;
 }
 
 function SummaryRow({ label, value, total, color }) {
@@ -242,7 +242,7 @@ function StatusBadge({ status }) {
 function Modal({ agents, setLeads, close }) {
   return (
     <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-md flex justify-center items-center z-50 p-4 transition-all duration-300">
-      <div className="bg-white/90 backdrop-blur-xl border border-white p-8 rounded-[2rem] w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300">
+      <div className="bg-white/90 backdrop-blur-xl border border-white p-8 rounded-4xl w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300">
         <div className="flex justify-between items-center mb-6">
            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Add New Lead</h2>
            <button onClick={close} className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">

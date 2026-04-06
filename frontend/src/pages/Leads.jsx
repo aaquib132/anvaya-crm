@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import API from "../services/api";
 import {
@@ -17,6 +17,7 @@ export default function Leads() {
   const [sortBy, setSortBy] = useState("Default");
   const [search, setSearch] = useState("");
 
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -47,9 +48,10 @@ export default function Leads() {
       result = result.filter(l => l.salesAgent?._id === agentFilter);
     }
     if (search) {
+      const searchLower = search.toLowerCase();
       result = result.filter(l => 
-        l.name?.toLowerCase().includes(search.toLowerCase()) || 
-        l.source?.toLowerCase().includes(search.toLowerCase())
+        (l.name || "").toLowerCase().includes(searchLower) || 
+        (l.source || "").toLowerCase().includes(searchLower)
       );
     }
 
@@ -66,8 +68,16 @@ export default function Leads() {
   if (loading) {
     return (
       <Layout>
-        <div className="flex justify-center items-center h-64">
-           <div className="animate-pulse text-brand-600 font-semibold">Loading Leads...</div>
+        <div className="flex justify-center items-center min-h-[60vh]">
+           <div className="glass-card px-8 py-6 flex flex-col items-center gap-4 border border-white/60 shadow-lg animate-in zoom-in-95 duration-500">
+             <div className="relative">
+                <div className="w-12 h-12 border-4 border-brand-100 rounded-full"></div>
+                <div className="w-12 h-12 border-4 border-brand-600 rounded-full border-t-transparent animate-spin absolute top-0 left-0"></div>
+             </div>
+             <div className="text-brand-700 font-bold bg-brand-50 px-4 py-1.5 rounded-full border border-brand-100 shadow-sm animate-pulse">
+               Loading Leads...
+             </div>
+           </div>
         </div>
       </Layout>
     );
@@ -83,7 +93,7 @@ export default function Leads() {
           </div>
           <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 text-sm font-semibold shadow-[0_4px_14px_0_rgb(99,102,241,0.39)] hover:shadow-[0_6px_20px_rgba(99,102,241,0.23)] hover:-translate-y-0.5 transition-all duration-200"
+              className="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 cursor-pointer text-sm font-semibold shadow-[0_4px_14px_0_rgb(99,102,241,0.39)] hover:shadow-[0_6px_20px_rgba(99,102,241,0.23)] hover:-translate-y-0.5 transition-all duration-200"
             >
               <Plus size={18} />
               Add New Lead
@@ -107,7 +117,7 @@ export default function Leads() {
                  <div className="flex items-center gap-2 bg-gray-50/50 px-3 py-1.5 rounded-xl border border-gray-100">
                     <Filter className="w-4 h-4 text-gray-400" />
                     <select 
-                      className="bg-transparent text-sm font-medium text-gray-700 outline-none"
+                      className="bg-transparent cursor-pointer text-sm font-medium text-gray-700 outline-none"
                       value={statusFilter}
                       onChange={(e) => setStatusFilter(e.target.value)}
                     >
@@ -122,7 +132,7 @@ export default function Leads() {
                  <div className="flex items-center gap-2 bg-gray-50/50 px-3 py-1.5 rounded-xl border border-gray-100">
                     <User className="w-4 h-4 text-gray-400" />
                     <select 
-                      className="bg-transparent text-sm font-medium text-gray-700 outline-none"
+                      className="bg-transparent cursor-pointer text-sm font-medium text-gray-700 outline-none"
                       value={agentFilter}
                       onChange={(e) => setAgentFilter(e.target.value)}
                     >
@@ -134,7 +144,7 @@ export default function Leads() {
                  <div className="w-px h-6 bg-gray-200 hidden sm:block"></div>
 
                  <select 
-                    className="bg-white border border-gray-200 text-sm font-medium text-gray-700 px-3 py-2.5 rounded-xl outline-none"
+                    className="bg-white cursor-pointer border border-gray-200 text-sm font-medium text-gray-700 px-3 py-2.5 rounded-xl outline-none"
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
                   >
@@ -162,7 +172,11 @@ export default function Leads() {
               <tbody className="divide-y divide-white/40">
                 {processedLeads.length > 0 ? (
                   processedLeads.map((lead) => (
-                    <tr key={lead._id} className="hover:bg-white/50 transition-colors group">
+                    <tr 
+                      key={lead.id || lead._id} 
+                      onClick={() => navigate(`/leads/${lead.id || lead._id}`)}
+                      className="hover:bg-white/50 transition-all group cursor-pointer"
+                    >
                       <td className="px-6 py-4">
                         <div className="font-semibold text-gray-900">{lead.name}</div>
                         <div className="text-xs text-gray-500 mt-0.5">{lead.source || "Direct"}</div>
@@ -187,9 +201,10 @@ export default function Leads() {
                          </span>
                       </td>
                       <td className="px-6 py-4 text-right">
-                         <Link to={`/leads/${lead._id}`} className="inline-flex items-center justify-center p-2 text-gray-400 hover:text-brand-600 hover:bg-brand-50 rounded-xl transition-all">
-                            <ChevronRight size={18} />
-                         </Link>
+                         <div className="inline-flex items-center gap-1.5 px-3 py-1.5 text-gray-400 group-hover:text-brand-600 group-hover:bg-brand-50 rounded-xl transition-all font-semibold text-sm">
+                            <span className="opacity-0 group-hover:opacity-100 transition-opacity translate-x-2 group-hover:translate-x-0 hidden sm:inline-block">View Details</span>
+                            <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                         </div>
                       </td>
                     </tr>
                   ))
@@ -244,7 +259,7 @@ function PriorityBadge({ priority }) {
 function Modal({ agents, setLeads, close }) {
   return (
     <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-md flex justify-center items-center z-50 p-4 transition-all duration-300">
-      <div className="bg-white/90 backdrop-blur-xl border border-white p-8 rounded-[2rem] w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white/90 backdrop-blur-xl border border-white p-8 rounded-4xl w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Add New Lead</h2>
            <button onClick={close} className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">

@@ -49,13 +49,13 @@ export default function LeadStatusChart({ stats }) {
         Lead Distribution
       </h2>
 
-      <div className="relative flex-1 min-h-50">
+      <div className="relative flex-1 min-h-[200px] h-[250px] w-full">
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
           <span className="text-3xl font-bold text-gray-900 leading-none">{totalLeads}</span>
           <span className="text-xs font-medium text-gray-400 mt-1 uppercase tracking-wide">Total Leads</span>
         </div>
 
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={250} minHeight={250}>
           <PieChart>
             <Pie
               data={data}

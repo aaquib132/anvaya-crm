@@ -53,8 +53,16 @@ export default function Reports() {
 
   if (loading) return (
     <Layout>
-      <div className="flex justify-center items-center h-64">
-         <div className="animate-pulse text-brand-600 font-semibold">Loading Reports...</div>
+      <div className="flex justify-center items-center min-h-[60vh]">
+         <div className="glass-card px-8 py-6 flex flex-col items-center gap-4 border border-white/60 shadow-lg animate-in zoom-in-95 duration-500">
+           <div className="relative">
+              <div className="w-12 h-12 border-4 border-brand-100 rounded-full"></div>
+              <div className="w-12 h-12 border-4 border-brand-600 rounded-full border-t-transparent animate-spin absolute top-0 left-0"></div>
+           </div>
+           <div className="text-brand-700 font-bold bg-brand-50 px-4 py-1.5 rounded-full border border-brand-100 shadow-sm animate-pulse">
+             Loading Reports...
+           </div>
+         </div>
       </div>
     </Layout>
   );
@@ -78,7 +86,7 @@ export default function Reports() {
                <h3 className="text-lg font-bold text-gray-900">Pipeline vs Closed</h3>
             </div>
             <div className="flex-1 w-full h-full min-h-0">
-              <ResponsiveContainer>
+              <ResponsiveContainer width="100%" height={250} minHeight={250}>
                 <PieChart>
                   <Pie
                     data={closedVsPipelineData}
@@ -107,7 +115,7 @@ export default function Reports() {
                <h3 className="text-lg font-bold text-gray-900">Status Distribution</h3>
             </div>
             <div className="flex-1 w-full h-full min-h-0">
-              <ResponsiveContainer>
+              <ResponsiveContainer width="100%" height={250} minHeight={250}>
                 <PieChart>
                   <Pie
                     data={statusDistData}
@@ -135,7 +143,7 @@ export default function Reports() {
             </div>
             <div className="flex-1 w-full h-full min-h-0 pt-4">
                {agentPerfData.length > 0 ? (
-                  <ResponsiveContainer>
+                  <ResponsiveContainer width="100%" height={300} minHeight={300}>
                     <BarChart data={agentPerfData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
                       <XAxis dataKey="name" axisLine={false} tickLine={false} dy={10} tick={{ fontSize: 13, fontWeight: 500 }} />

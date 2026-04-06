@@ -74,4 +74,27 @@ const getLeads = async (req, res) => {
   }
 };
 
-module.exports = { createLead, getLeads };
+const updateLead = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+    
+    const lead = await Lead.findByIdAndUpdate(
+      id,
+      updates,
+      { new: true, runValidators: true }
+    );
+    
+    if (!lead) return res.status(404).json({ error: "Lead not found" });
+    
+    // We want to return the populated lead, same as getLeads
+    const populatedLead = await Lead.findById(id).populate("salesAgent", "name email").lean();
+    populatedLead.id = populatedLead._id;
+    
+    res.status(200).json(populatedLead);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { createLead, getLeads, updateLead };

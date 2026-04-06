@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Layout from "../components/Layout";
 import API from "../services/api";
 import { Users, Plus, X, Mail, Phone, ExternalLink } from "lucide-react";
@@ -17,8 +18,16 @@ export default function Agents() {
 
   if (loading) return (
     <Layout>
-      <div className="flex justify-center items-center h-64">
-         <div className="animate-pulse text-brand-600 font-semibold">Loading Agents...</div>
+      <div className="flex justify-center items-center min-h-[60vh]">
+         <div className="glass-card px-8 py-6 flex flex-col items-center gap-4 border border-white/60 shadow-lg animate-in zoom-in-95 duration-500">
+           <div className="relative">
+              <div className="w-12 h-12 border-4 border-brand-100 rounded-full"></div>
+              <div className="w-12 h-12 border-4 border-brand-600 rounded-full border-t-transparent animate-spin absolute top-0 left-0"></div>
+           </div>
+           <div className="text-brand-700 font-bold bg-brand-50 px-4 py-1.5 rounded-full border border-brand-100 shadow-sm animate-pulse">
+             Loading Agents...
+           </div>
+         </div>
       </div>
     </Layout>
   );
@@ -37,7 +46,7 @@ export default function Agents() {
           
           <button
              onClick={() => setIsModalOpen(true)}
-             className="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 text-sm font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+             className="bg-brand-600 cursor-pointer hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 text-sm font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
           >
              <Plus size={18} />
              Add New Agent
@@ -46,24 +55,24 @@ export default function Agents() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {agents.map(agent => (
-            <div key={agent._id} className="glass-card hover:-translate-y-2 transition-transform duration-300 overflow-hidden relative group">
+            <Link to={`/agents/${agent.id || agent._id}`} key={agent._id} className="glass-card hover:-translate-y-2 hover:border-brand-300 hover:shadow-lg hover:shadow-brand-500/10 transition-all duration-300 overflow-hidden relative group block cursor-pointer">
                <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button className="text-gray-400 hover:text-brand-600"><ExternalLink size={18}/></button>
+                  <span className="inline-block text-brand-600 p-2 bg-brand-50 rounded-lg"><ExternalLink size={18}/></span>
                </div>
                
                <div className="p-6 flex flex-col items-center text-center">
-                  <div className="w-20 h-20 bg-linear-to-br from-indigo-100 to-purple-100 rounded-[1.5rem] flex items-center justify-center mb-4 shadow-inner border border-white">
+                  <div className="w-20 h-20 bg-linear-to-br from-indigo-100 to-purple-100 rounded-3xl flex items-center justify-center mb-4 shadow-inner border border-white group-hover:scale-105 transition-transform">
                      <Users size={32} className="text-brand-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">{agent.name}</h3>
+                  <h3 className="text-xl font-bold text-gray-900 group-hover:text-brand-700 transition-colors">{agent.name}</h3>
                   <div className="mt-4 w-full space-y-3">
-                     <div className="flex items-center justify-center gap-2 text-gray-600 bg-gray-50/50 py-2 px-3 rounded-xl border border-gray-100">
-                        <Mail size={14} className="text-gray-400"/>
+                     <div className="flex items-center justify-center gap-2 text-gray-600 bg-gray-50/50 py-2 px-3 rounded-xl border border-gray-100 group-hover:bg-white group-hover:border-brand-100 transition-colors">
+                        <Mail size={14} className="text-gray-400 group-hover:text-brand-400 transition-colors"/>
                         <span className="text-sm font-medium">{agent.email || "No email provided"}</span>
                      </div>
                   </div>
                </div>
-            </div>
+            </Link>
           ))}
           {agents.length === 0 && (
             <div className="col-span-full py-12 flex flex-col items-center justify-center text-gray-500 bg-white/40 rounded-3xl border border-dashed border-gray-300">
@@ -76,7 +85,7 @@ export default function Agents() {
 
         {isModalOpen && (
           <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-md flex justify-center items-center z-50 p-4 transition-all duration-300">
-            <div className="bg-white/90 backdrop-blur-xl border border-white p-8 rounded-[2rem] w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="bg-white/90 backdrop-blur-xl border border-white p-8 rounded-4xl w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300">
               <div className="flex justify-between items-center mb-6">
                  <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Add New Agent</h2>
                  <button onClick={() => setIsModalOpen(false)} className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">
