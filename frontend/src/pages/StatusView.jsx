@@ -84,7 +84,7 @@ export default function StatusView() {
         
         {/* Top Header matching wireframe "Leads by Status" */}
         <div className="mb-8 p-6 glass-card border border-brand-200/50 bg-white/40 shadow-sm rounded-3xl">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight flex items-center gap-3">
              <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-600 to-indigo-500">Leads by Status</span>
           </h1>
         </div>

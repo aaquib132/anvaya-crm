@@ -88,8 +88,10 @@ export default function Leads() {
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Leads</h1>
-            <p className="text-sm text-gray-500 mt-1">Manage and track your entire pipeline</p>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight flex items-center gap-3">
+              Leads
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-500 mt-1">Manage and track your potential customers</p>
           </div>
           <button
               onClick={() => setIsModalOpen(true)}

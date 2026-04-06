@@ -38,10 +38,10 @@ export default function Agents() {
         
         <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight flex items-center gap-3">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight flex items-center gap-3">
               Sales Agents
             </h1>
-            <p className="text-sm text-gray-500 mt-1">Manage your team and track performance</p>
+            <p className="text-xs sm:text-sm text-gray-500 mt-1">Manage your team and track performance</p>
           </div>
           
           <button
