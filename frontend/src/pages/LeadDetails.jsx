@@ -141,10 +141,19 @@ export default function LeadDetails() {
                             {agents.map(a => <option key={a._id || a.id} value={a._id || a.id}>{a.name}</option>)}
                          </select>
                        </div>
-                       <div>
-                         <label className="block text-sm font-semibold text-gray-700 mb-2">Lead Source</label>
-                         <input type="text" className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-500 outline-none text-sm bg-white/60" value={editForm.source || ""} onChange={e => setEditForm({...editForm, source: e.target.value})} />
-                       </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-2">Lead Source</label>
+                          <select className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-500 outline-none text-sm bg-white" value={editForm.source || ""} onChange={e => setEditForm({...editForm, source: e.target.value})}>
+                             <option value="Website">Website</option>
+                             <option value="Referral">Referral</option>
+                             <option value="Social Media">Social Media</option>
+                             <option value="Direct">Direct</option>
+                             <option value="Cold Call">Cold Call</option>
+                             <option value="Advertisement">Advertisement</option>
+                             <option value="Email">Email</option>
+                             <option value="Other">Other</option>
+                          </select>
+                        </div>
                        <div>
                          <label className="block text-sm font-semibold text-gray-700 mb-2">Lead Status</label>
                          <select className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-500 outline-none text-sm bg-white" value={editForm.status || "New"} onChange={e => setEditForm({...editForm, status: e.target.value})}>

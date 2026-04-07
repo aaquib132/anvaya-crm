@@ -287,6 +287,9 @@ function Modal({ agents, setLeads, close }) {
                <option>Referral</option>
                <option>Social Media</option>
                <option>Direct</option>
+               <option>Cold Call</option>
+               <option>Advertisement</option>
+               <option>Email</option>
                <option>Other</option>
             </select>
           </div>
@@ -312,12 +315,13 @@ function Modal({ agents, setLeads, close }) {
              </div>
              <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Status</label>
-                <select name="status" className="w-full border border-gray-200/50 bg-white/50 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-shadow">
-                  <option>New</option>
-                  <option>Contacted</option>
-                  <option>Qualified</option>
-                  <option>Proposal Sent</option>
-                </select>
+                 <select name="status" className="w-full border border-gray-200/50 bg-white/50 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-shadow">
+                   <option>New</option>
+                   <option>Contacted</option>
+                   <option>Qualified</option>
+                   <option>Proposal Sent</option>
+                   <option>Closed</option>
+                 </select>
              </div>
           </div>
           <div>

@@ -128,6 +128,7 @@ export default function Leads() {
                       <option value="Contacted">Contacted</option>
                       <option value="Qualified">Qualified</option>
                       <option value="Proposal Sent">Proposal Sent</option>
+                      <option value="Closed">Closed</option>
                     </select>
                  </div>
                  
@@ -236,7 +237,8 @@ function StatusBadge({ status }) {
     New: "bg-amber-100/80 text-amber-700 border-amber-200",
     Contacted: "bg-brand-100/80 text-brand-700 border-brand-200",
     Qualified: "bg-emerald-100/80 text-emerald-700 border-emerald-200",
-    "Proposal Sent": "bg-purple-100/80 text-purple-700 border-purple-200"
+    "Proposal Sent": "bg-purple-100/80 text-purple-700 border-purple-200",
+    Closed: "bg-gray-100/80 text-gray-700 border-gray-200"
   };
   return (
     <span className={`px-2.5 py-1 rounded-lg text-xs font-bold border ${map[status] || "bg-gray-100 text-gray-600 border-gray-200"}`}>
@@ -306,6 +308,9 @@ function Modal({ agents, setLeads, close }) {
                <option>Referral</option>
                <option>Social Media</option>
                <option>Direct</option>
+               <option>Cold Call</option>
+               <option>Advertisement</option>
+               <option>Email</option>
                <option>Other</option>
             </select>
           </div>
@@ -337,6 +342,7 @@ function Modal({ agents, setLeads, close }) {
                   <option>Contacted</option>
                   <option>Qualified</option>
                   <option>Proposal Sent</option>
+                  <option>Closed</option>
                 </select>
              </div>
           </div>
