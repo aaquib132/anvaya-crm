@@ -1,11 +1,42 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Layout from "../components/Layout";
-import { Settings as SettingsIcon, Bell, Shield, User, Smartphone, Globe, Cloud, Camera } from "lucide-react";
-
+import { Settings as SettingsIcon, Bell, Shield, User, Smartphone, Globe, Cloud, Camera, Database, Trash2 } from "lucide-react";
+import API from "../services/api";
 export default function Settings() {
   const [avatar, setAvatar] = useState(null);
   const fileInputRef = useRef(null);
+  
+  const [agents, setAgents] = useState([]);
+  const [leads, setLeads] = useState([]);
 
+  useEffect(() => {
+    API.get("/agents").then(res => setAgents(res.data)).catch(console.error);
+    API.get("/leads").then(res => setLeads(res.data)).catch(console.error);
+  }, []);
+
+  const handleDeleteAgent = async (id) => {
+    if (window.confirm("Are you sure you want to delete this agent? This action cannot be undone.")) {
+      try {
+        await API.delete(`/agents/${id}`);
+        setAgents(agents.filter(a => (a.id || a._id) !== id));
+      } catch (err) {
+        console.error(err);
+        alert("Failed to delete agent");
+      }
+    }
+  };
+
+  const handleDeleteLead = async (id) => {
+    if (window.confirm("Are you sure you want to delete this lead? This action cannot be undone.")) {
+      try {
+        await API.delete(`/leads/${id}`);
+        setLeads(leads.filter(l => (l.id || l._id) !== id));
+      } catch (err) {
+        console.error(err);
+        alert("Failed to delete lead");
+      }
+    }
+  };
   const handleAvatarSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -116,8 +147,58 @@ export default function Settings() {
                   </div>
                </div>
             </div>
+         </div>
 
-        </div>
+         {/* Data Management Section */}
+         <div className="glass-card overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60">
+            <div className="px-8 py-5 border-b border-gray-100/60 bg-white/40 flex items-center gap-2">
+              <Database className="w-5 h-5 text-brand-600" />
+              <h2 className="text-xl font-bold text-gray-900">Data Management</h2>
+            </div>
+            
+            <div className="p-8 bg-white/30 backdrop-blur-sm space-y-8">
+               <div>
+                 <h3 className="font-bold text-gray-900 text-md mb-3">Manage Agents ({agents.length})</h3>
+                 <div className="bg-white/50 border border-gray-200 rounded-xl overflow-hidden max-h-60 overflow-y-auto">
+                   <ul className="divide-y divide-gray-100">
+                     {agents.map(agent => (
+                       <li key={agent.id || agent._id} className="p-3 hover:bg-white flex items-center justify-between transition-colors">
+                         <div>
+                           <p className="text-sm font-semibold text-gray-800">{agent.name}</p>
+                           <p className="text-xs text-gray-500">{agent.email}</p>
+                         </div>
+                         <button onClick={() => handleDeleteAgent(agent.id || agent._id)} className="p-2.5 text-red-500 cursor-pointer hover:bg-red-50 hover:text-red-700 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-sm border border-transparent hover:border-red-100 bg-white/50" title="Delete Agent">
+                           <Trash2 size={16} />
+                         </button>
+                       </li>
+                     ))}
+                     {agents.length === 0 && <p className="p-4 text-sm text-gray-500 text-center">No agents found.</p>}
+                   </ul>
+                 </div>
+               </div>
+
+               <div>
+                 <h3 className="font-bold text-gray-900 text-md mb-3">Manage Leads ({leads.length})</h3>
+                 <div className="bg-white/50 border border-gray-200 rounded-xl overflow-hidden max-h-60 overflow-y-auto">
+                   <ul className="divide-y divide-gray-100">
+                     {leads.map(lead => (
+                       <li key={lead.id || lead._id} className="p-3 hover:bg-white flex items-center justify-between transition-colors">
+                         <div>
+                           <p className="text-sm font-semibold text-gray-800">{lead.name}</p>
+                           <p className="text-xs text-gray-500">{lead.source} - {lead.status}</p>
+                         </div>
+                         <button onClick={() => handleDeleteLead(lead.id || lead._id)} className="p-2.5 text-red-500 cursor-pointer hover:bg-red-50 hover:text-red-700 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-sm border border-transparent hover:border-red-100 bg-white/50" title="Delete Lead">
+                           <Trash2 size={16} />
+                         </button>
+                       </li>
+                     ))}
+                     {leads.length === 0 && <p className="p-4 text-sm text-gray-500 text-center">No leads found.</p>}
+                   </ul>
+                 </div>
+               </div>
+            </div>
+         </div>
+
       </div>
     </Layout>
   );

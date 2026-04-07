@@ -47,7 +47,6 @@ const addComment = async (req, res) => {
     });
 
     await comment.save();
-    const populatedComment = await comment.populate("author", "name email");
     res.status(201).json(comment); 
 
   } catch (error) {

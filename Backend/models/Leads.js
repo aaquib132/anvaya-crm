@@ -21,7 +21,7 @@ const leadSchema = new mongoose.Schema(
     salesAgent: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "SalesAgent",
-      required: [true, "Sales Agent is required"],
+      required: false, // Allow unassigned leads
     },
     status: {
       type: String,

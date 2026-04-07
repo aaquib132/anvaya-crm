@@ -265,8 +265,8 @@ function Modal({ agents, setLeads, close }) {
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-md flex justify-center items-center z-50 p-4 transition-all duration-300 overflow-y-auto">
-      <div className="bg-white/90 backdrop-blur-xl border border-white p-8 rounded-4xl w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300 my-8">
+    <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-md flex justify-center items-start z-50 p-4 pt-12 pb-12 transition-all duration-300 overflow-y-auto">
+      <div className="bg-white/90  backdrop-blur-xl border border-white p-8 rounded-4xl w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300 my-8">
         <div className="flex justify-between items-center mb-6">
            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Add New Lead</h2>
            <button onClick={close} className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">
@@ -313,6 +313,7 @@ function Modal({ agents, setLeads, close }) {
              <div className="relative">
                 <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <select name="salesAgent" className="w-full border border-gray-200/50 bg-white/50 pl-10 pr-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none appearance-none transition-shadow">
+                  <option value="">Unassigned</option>
                   {agents.map((a) => (
                     <option key={a._id} value={a._id}>{a.name}</option>
                   ))}

@@ -246,7 +246,7 @@ function Modal({ agents, setLeads, close }) {
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-md flex justify-center items-center z-50 p-4 transition-all duration-300 overflow-y-auto">
+    <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-md flex justify-center items-start z-50 pb-12 transition-all duration-300 overflow-y-auto">
       <div className="bg-white/90 backdrop-blur-xl border border-white p-8 rounded-4xl w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300 my-8">
         <div className="flex justify-between items-center mb-6">
            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Add New Lead</h2>
@@ -331,10 +331,10 @@ function Modal({ agents, setLeads, close }) {
              <p className="text-xs text-gray-400 mt-1">Hold Ctrl (or Cmd) to select multiple tags</p>
           </div>
           <div className="pt-4 flex gap-3">
-             <button type="button" onClick={close} className="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-colors">
+             <button type="button" onClick={close} className="flex-1 px-4 py-3 cursor-pointer rounded-xl border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-colors">
                 Cancel
              </button>
-             <button type="submit" className="flex-1 bg-brand-600 text-white py-3 rounded-xl font-bold hover:bg-brand-700 shadow-md transition-all active:scale-[0.98]">
+             <button type="submit" className="flex-1 bg-brand-600 text-white py-3 cursor-pointer rounded-xl font-bold hover:bg-brand-700 shadow-md transition-all active:scale-[0.98]">
                Create Lead
              </button>
           </div>

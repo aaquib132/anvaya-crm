@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const cors = require('cors')
 const mongoose = require("mongoose");
 
-const leadRoutes = require('./routes/leadRoutes')
+const leadRoutes = require("./routes/leadRoutes");
 const agentRoutes = require("./routes/agentRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const tagRoutes = require("./routes/tagRoutes");

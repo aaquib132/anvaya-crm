@@ -5,14 +5,14 @@ const createLead = async (req, res) => {
     const { name, source, salesAgent, status, tags, timeToClose, priority } =
       req.body;
 
-    if (!name || !source || !salesAgent || !timeToClose) {
+    if (!name || !source || !timeToClose) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
     const lead = new Lead({
       name,
       source,
-      salesAgent,
+      salesAgent: salesAgent || null,
       status,
       tags,
       timeToClose,
@@ -79,6 +79,10 @@ const updateLead = async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
     
+    if (updates.salesAgent === "") {
+        updates.salesAgent = null;
+    }
+    
     const lead = await Lead.findByIdAndUpdate(
       id,
       updates,
@@ -97,4 +101,19 @@ const updateLead = async (req, res) => {
   }
 };
 
-module.exports = { createLead, getLeads, updateLead };
+const deleteLead = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedLead = await Lead.findByIdAndDelete(id);
+
+    if (!deletedLead) {
+      return res.status(404).json({ error: "Lead not found" });
+    }
+
+    res.status(200).json({ message: "Lead deleted successfully", id });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { createLead, getLeads, updateLead, deleteLead };

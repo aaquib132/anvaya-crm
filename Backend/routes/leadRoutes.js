@@ -1,13 +1,11 @@
-const express = require('express')
-const { createLead, getLeads, updateLead } = require('../controllers/leadController')
+const express = require("express");
+const { createLead, getLeads, updateLead, deleteLead } = require("../controllers/leadController");
 
-const router = express.Router()
+const router = express.Router();
 
 router.get("/", getLeads);
-router.post('/', createLead);
-router.put('/:id', updateLead);
+router.post("/", createLead);
+router.put("/:id", updateLead);
+router.delete("/:id", deleteLead);
 
 module.exports = router;
-
-
-

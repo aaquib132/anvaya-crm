@@ -39,4 +39,24 @@ const getAgents = async (req, res) => {
   }
 };
 
-module.exports = { createAgent, getAgents };
+const deleteAgent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Unassign leads from this agent first
+    const Lead = require("../models/Leads");
+    await Lead.updateMany({ salesAgent: id }, { salesAgent: null });
+
+    const deletedAgent = await SalesAgent.findByIdAndDelete(id);
+
+    if (!deletedAgent) {
+      return res.status(404).json({ error: "Agent not found" });
+    }
+
+    res.status(200).json({ message: "Agent deleted successfully, leads unassigned", id });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { createAgent, getAgents, deleteAgent };
