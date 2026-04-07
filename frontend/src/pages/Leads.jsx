@@ -259,9 +259,14 @@ function PriorityBadge({ priority }) {
 }
 
 function Modal({ agents, setLeads, close }) {
+  const [tags, setTags] = useState([]);
+  useEffect(() => {
+    API.get("/tags").then((res) => setTags(res.data)).catch(console.error);
+  }, []);
+
   return (
-    <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-md flex justify-center items-center z-50 p-4 transition-all duration-300">
-      <div className="bg-white/90 backdrop-blur-xl border border-white p-8 rounded-4xl w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-md flex justify-center items-center z-50 p-4 transition-all duration-300 overflow-y-auto">
+      <div className="bg-white/90 backdrop-blur-xl border border-white p-8 rounded-4xl w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300 my-8">
         <div className="flex justify-between items-center mb-6">
            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Add New Lead</h2>
            <button onClick={close} className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">
@@ -279,6 +284,7 @@ function Modal({ agents, setLeads, close }) {
               status: fd.get("status"),
               timeToClose: Number(fd.get("timeToClose")),
               priority: fd.get("priority"),
+              tags: fd.getAll("tags"),
             };
             const res = await API.post("/leads", newLead);
             setLeads((prev) => [res.data, ...prev]);
@@ -335,6 +341,13 @@ function Modal({ agents, setLeads, close }) {
           <div>
              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Days to Close</label>
              <input name="timeToClose" type="number" min="0" placeholder="e.g. 14" required className="w-full border border-gray-200/50 bg-white/50 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-shadow" />
+          </div>
+          <div>
+             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Tags</label>
+             <select name="tags" multiple className="w-full border border-gray-200/50 bg-white/50 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-shadow h-24">
+               {tags.map((t) => <option key={t._id} value={t.name}>{t.name}</option>)}
+             </select>
+             <p className="text-xs text-gray-400 mt-1">Hold Ctrl (or Cmd) to select multiple tags</p>
           </div>
           <div className="pt-4 flex gap-3">
              <button type="button" onClick={close} className="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-colors">

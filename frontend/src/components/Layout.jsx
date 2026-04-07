@@ -21,7 +21,7 @@ export default function Layout({ children }) {
          <MobileNavLink to="/leads" icon={<TrendingUp size={22} />} label="Leads" />
          <MobileNavLink to="/agents" icon={<Users size={22} />} label="Agents" />
          <MobileNavLink to="/reports" icon={<BarChart3 size={22} />} label="Reports" />
-         <MobileNavLink to="/settings" icon={<Settings size={22} />} label="Config" />
+         <MobileNavLink to="/settings" icon={<Settings size={22} />} label="Settings" />
       </div>
     </div>
   );
