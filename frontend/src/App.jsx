@@ -8,9 +8,12 @@ import StatusView from "./pages/StatusView";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 
+import { ToastProvider } from "./context/ToastContext";
+
 function App() {
   return (
-    <BrowserRouter>
+    <ToastProvider>
+      <BrowserRouter>
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/leads" element={<Leads />} />
@@ -22,6 +25,7 @@ function App() {
         <Route path="/settings" element={<Settings />} />
       </Routes>
     </BrowserRouter>
+    </ToastProvider>
   );
 }
 

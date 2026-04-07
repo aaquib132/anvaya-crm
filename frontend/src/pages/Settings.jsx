@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import Layout from "../components/Layout";
 import { Settings as SettingsIcon, Bell, Shield, User, Smartphone, Globe, Cloud, Camera, Database, Trash2 } from "lucide-react";
 import API from "../services/api";
+import { useToast } from "../context/ToastContext";
+import ConfirmModal from "../components/ConfirmModal";
 export default function Settings() {
   const [avatar, setAvatar] = useState(null);
   const fileInputRef = useRef(null);
@@ -9,32 +11,34 @@ export default function Settings() {
   const [agents, setAgents] = useState([]);
   const [leads, setLeads] = useState([]);
 
+  // Modal State
+  const [confirmDelete, setConfirmDelete] = useState({ isOpen: false, type: null, id: null });
+  const { showToast } = useToast();
+
   useEffect(() => {
     API.get("/agents").then(res => setAgents(res.data)).catch(console.error);
     API.get("/leads").then(res => setLeads(res.data)).catch(console.error);
   }, []);
 
   const handleDeleteAgent = async (id) => {
-    if (window.confirm("Are you sure you want to delete this agent? This action cannot be undone.")) {
-      try {
-        await API.delete(`/agents/${id}`);
-        setAgents(agents.filter(a => (a.id || a._id) !== id));
-      } catch (err) {
-        console.error(err);
-        alert("Failed to delete agent");
-      }
+    try {
+      await API.delete(`/agents/${id}`);
+      setAgents(agents.filter(a => (a.id || a._id) !== id));
+      showToast("Agent deleted successfully, leads unassigned.");
+    } catch (err) {
+      console.error(err);
+      showToast("Failed to delete agent.", "error");
     }
   };
 
   const handleDeleteLead = async (id) => {
-    if (window.confirm("Are you sure you want to delete this lead? This action cannot be undone.")) {
-      try {
-        await API.delete(`/leads/${id}`);
-        setLeads(leads.filter(l => (l.id || l._id) !== id));
-      } catch (err) {
-        console.error(err);
-        alert("Failed to delete lead");
-      }
+    try {
+      await API.delete(`/leads/${id}`);
+      setLeads(leads.filter(l => (l.id || l._id) !== id));
+      showToast("Lead deleted successfully.");
+    } catch (err) {
+      console.error(err);
+      showToast("Failed to delete lead.", "error");
     }
   };
   const handleAvatarSelect = (e) => {
@@ -167,10 +171,10 @@ export default function Settings() {
                            <p className="text-sm font-semibold text-gray-800">{agent.name}</p>
                            <p className="text-xs text-gray-500">{agent.email}</p>
                          </div>
-                         <button onClick={() => handleDeleteAgent(agent.id || agent._id)} className="p-2.5 text-red-500 cursor-pointer hover:bg-red-50 hover:text-red-700 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-sm border border-transparent hover:border-red-100 bg-white/50" title="Delete Agent">
-                           <Trash2 size={16} />
-                         </button>
-                       </li>
+                          <button onClick={() => setConfirmDelete({ isOpen: true, type: 'agent', id: (agent.id || agent._id) })} className="p-2.5 text-red-500 cursor-pointer hover:bg-red-50 hover:text-red-700 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-sm border border-transparent hover:border-red-100 bg-white/50" title="Delete Agent">
+                            <Trash2 size={16} />
+                          </button>
+                        </li>
                      ))}
                      {agents.length === 0 && <p className="p-4 text-sm text-gray-500 text-center">No agents found.</p>}
                    </ul>
@@ -187,10 +191,10 @@ export default function Settings() {
                            <p className="text-sm font-semibold text-gray-800">{lead.name}</p>
                            <p className="text-xs text-gray-500">{lead.source} - {lead.status}</p>
                          </div>
-                         <button onClick={() => handleDeleteLead(lead.id || lead._id)} className="p-2.5 text-red-500 cursor-pointer hover:bg-red-50 hover:text-red-700 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-sm border border-transparent hover:border-red-100 bg-white/50" title="Delete Lead">
-                           <Trash2 size={16} />
-                         </button>
-                       </li>
+                          <button onClick={() => setConfirmDelete({ isOpen: true, type: 'lead', id: (lead.id || lead._id) })} className="p-2.5 text-red-500 cursor-pointer hover:bg-red-50 hover:text-red-700 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-sm border border-transparent hover:border-red-100 bg-white/50" title="Delete Lead">
+                            <Trash2 size={16} />
+                          </button>
+                        </li>
                      ))}
                      {leads.length === 0 && <p className="p-4 text-sm text-gray-500 text-center">No leads found.</p>}
                    </ul>
@@ -200,6 +204,19 @@ export default function Settings() {
          </div>
 
       </div>
+      
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={confirmDelete.isOpen}
+        onClose={() => setConfirmDelete({ isOpen: false, type: null, id: null })}
+        onConfirm={() => {
+           if (confirmDelete.type === 'agent') handleDeleteAgent(confirmDelete.id);
+           else if (confirmDelete.type === 'lead') handleDeleteLead(confirmDelete.id);
+        }}
+        title={`Delete ${confirmDelete.type === 'agent' ? 'Agent' : 'Lead'}`}
+        message={`Are you sure you want to delete this ${confirmDelete.type}? This action cannot be undone.`}
+        confirmText="Delete Now"
+      />
     </Layout>
   );
 }

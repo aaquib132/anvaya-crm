@@ -3,8 +3,9 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import API from "../services/api";
 import { 
-  ArrowLeft, User, Users, Briefcase, Mail, Clock, MessageSquare, Send, Check
+  ArrowLeft, User, Users, Briefcase, Mail, Phone, Calendar, Clock, AlertTriangle, MessageSquare, Send, Check
 } from "lucide-react";
+import { useToast } from "../context/ToastContext";
 
 export default function LeadDetails() {
   const { id } = useParams();
@@ -16,6 +17,8 @@ export default function LeadDetails() {
   const [agents, setAgents] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({});
+  const [selectedAuthorId, setSelectedAuthorId] = useState("");
+  const { showToast } = useToast();
 
   useEffect(() => {
     API.get(`/leads`).then(res => {
@@ -30,18 +33,29 @@ export default function LeadDetails() {
 
     API.get(`/agents`).then(res => {
       setAgents(res.data);
+      if (res.data.length > 0) {
+        setSelectedAuthorId(res.data[0]._id || res.data[0].id);
+      }
     });
   }, [id]);
 
   const handleComment = async () => {
-    if (!text || agents.length === 0) return;
-    await API.post(`/leads/${id}/comments`, {
-      author: agents[0]._id || agents[0].id, 
-      commentText: text,
-    });
-    setText("");
-    const res = await API.get(`/leads/${id}/comments`);
-    setComments(res.data);
+    if (!text || !selectedAuthorId) {
+      showToast("Please enter a comment and select an author.", "error");
+      return;
+    }
+    try {
+      await API.post(`/leads/${id}/comments`, {
+        author: selectedAuthorId, 
+        commentText: text,
+      });
+      setText("");
+      const res = await API.get(`/leads/${id}/comments`);
+      setComments(res.data);
+      showToast("Comment added successfully!");
+    } catch (e) {
+      showToast("Failed to add comment.", "error");
+    }
   };
 
   const handleSaveEdit = async () => {
@@ -57,9 +71,10 @@ export default function LeadDetails() {
       setLead(res.data);
       setEditForm(res.data);
       setIsEditing(false);
+      showToast("Lead updated successfully!");
     } catch (e) {
       console.error(e);
-      alert("Failed to save lead updates.");
+      showToast("Failed to save lead updates.", "error");
     }
   };
 
@@ -208,19 +223,35 @@ export default function LeadDetails() {
               </div>
 
               <div className="p-6 border-t border-gray-100/60 bg-white/50 rounded-b-3xl">
-                <div className="flex gap-3">
-                  <textarea
-                    placeholder="Add a new comment..."
-                    className="flex-1 border border-gray-200 bg-white rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-brand-500 min-h-[60px] max-h-[150px] outline-none resize-y shadow-inner"
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                  />
-                  <button
-                    onClick={handleComment}
-                    className="bg-brand-600 cursor-pointer hover:bg-brand-700 text-white px-6 py-3 rounded-2xl flex items-center justify-center h-fit shadow-md shadow-brand-500/20 transition-all font-bold active:scale-95 self-end gap-2"
-                  >
-                    <Send className="w-4 h-4" /> Submit
-                  </button>
+                <div className="flex flex-col gap-3">
+                  <div className="flex gap-3">
+                    <select
+                      className="border border-gray-200 bg-white rounded-xl px-3 py-2 text-xs font-semibold outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer"
+                      value={selectedAuthorId}
+                      onChange={(e) => setSelectedAuthorId(e.target.value)}
+                    >
+                      {agents.map((a) => (
+                        <option key={a._id || a.id} value={a._id || a.id}>
+                          {a.name}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="text-xs text-gray-400 self-center font-bold italic"> commenting as agent</span>
+                  </div>
+                  <div className="flex gap-3">
+                    <textarea
+                      placeholder="Add a new comment..."
+                      className="flex-1 border border-gray-200 bg-white rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-brand-500 min-h-[60px] max-h-[150px] outline-none resize-y shadow-inner"
+                      value={text}
+                      onChange={(e) => setText(e.target.value)}
+                    />
+                    <button
+                      onClick={handleComment}
+                      className="bg-brand-600 cursor-pointer hover:bg-brand-700 text-white px-6 py-3 rounded-2xl flex items-center justify-center h-fit shadow-md shadow-brand-500/20 transition-all font-bold active:scale-95 self-end gap-2"
+                    >
+                      <Send className="w-4 h-4" /> Submit
+                    </button>
+                  </div>
                 </div>
               </div>
 

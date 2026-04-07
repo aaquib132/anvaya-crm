@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import Layout from "../components/Layout";
 import API from "../services/api";
 import { Users, Plus, X, Mail, Phone, ExternalLink } from "lucide-react";
+import { useToast } from "../context/ToastContext";
 
 export default function Agents() {
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { showToast } = useToast();
 
   useEffect(() => {
     API.get("/agents").then(res => {
@@ -104,9 +106,10 @@ export default function Agents() {
                     const res = await API.post("/agents", newAgent);
                     setAgents(prev => [...prev, res.data]);
                     setIsModalOpen(false);
+                    showToast("Agent created successfully!");
                   } catch (err) {
                     console.error(err);
-                    alert("Failed to add agent.");
+                    showToast(err.response?.data?.error || "Failed to add agent.", "error");
                   }
                 }}
                 className="space-y-5"
