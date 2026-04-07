@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import API from "../services/api";
 import { 
-  ArrowLeft, User, Users, Briefcase, Mail, Phone, Calendar, Clock, AlertTriangle, MessageSquare, Send, Check
+  ArrowLeft, User, Users, Briefcase, Mail, Clock, MessageSquare, Send, Check
 } from "lucide-react";
 
 export default function LeadDetails() {

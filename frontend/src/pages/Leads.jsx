@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import API from "../services/api";
 import {
-  Search, Plus, MoreVertical, AlertCircle, ChevronRight, X, User, Briefcase, Filter
+  Search, Plus, AlertCircle, ChevronRight, X, User, Briefcase, Filter
 } from "lucide-react";
 
 export default function Leads() {
