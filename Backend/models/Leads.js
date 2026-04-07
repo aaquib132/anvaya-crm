@@ -11,6 +11,8 @@ const leadSchema = new mongoose.Schema(
       enum: [
         "Website",
         "Referral",
+        "Social Media",
+        "Direct",
         "Cold Call",
         "Advertisement",
         "Email",
@@ -35,7 +37,7 @@ const leadSchema = new mongoose.Schema(
      timeToClose: {
     type: Number,
     required: [true, 'Time to Close is required'],
-    min: [1, 'Time to Close must be a positive number'],  
+    min: [0, 'Time to Close must be a non-negative number'],  
   },
     priority: {
       type: String,

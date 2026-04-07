@@ -19,10 +19,11 @@ const createLead = async (req, res) => {
       priority,
     });
 
-    await lead.save();
-
     res.status(201).json(lead);
   } catch (error) {
+    if (error.name === "ValidationError") {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: error.message });
   }
 };
@@ -97,6 +98,9 @@ const updateLead = async (req, res) => {
     
     res.status(200).json(populatedLead);
   } catch (error) {
+    if (error.name === "ValidationError") {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: error.message });
   }
 };

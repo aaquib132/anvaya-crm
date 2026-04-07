@@ -287,6 +287,7 @@ function Modal({ agents, setLeads, close }) {
                <option>Referral</option>
                <option>Social Media</option>
                <option>Direct</option>
+               <option>Other</option>
             </select>
           </div>
           <div>
