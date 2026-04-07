@@ -5,6 +5,7 @@ import API from "../services/api";
 import {
   Search, Plus, AlertCircle, ChevronRight, X, User, Briefcase, Filter
 } from "lucide-react";
+import { useToast } from "../context/ToastContext";
 
 export default function Leads() {
   const [leads, setLeads] = useState([]);
@@ -19,6 +20,7 @@ export default function Leads() {
 
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -288,9 +290,15 @@ function Modal({ agents, setLeads, close }) {
               priority: fd.get("priority"),
               tags: fd.getAll("tags"),
             };
-            const res = await API.post("/leads", newLead);
-            setLeads((prev) => [res.data, ...prev]);
-            close();
+            try {
+              const res = await API.post("/leads", newLead);
+              setLeads((prev) => [res.data, ...prev]);
+              close();
+              showToast("Lead added successfully!");
+            } catch (err) {
+              console.error(err);
+              showToast(err.response?.data?.error || "Failed to add lead.", "error");
+            }
           }}
           className="space-y-5"
         >

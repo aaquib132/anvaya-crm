@@ -5,8 +5,8 @@ const createLead = async (req, res) => {
     const { name, source, salesAgent, status, tags, timeToClose, priority } =
       req.body;
 
-    if (!name || !source || !timeToClose) {
-      return res.status(400).json({ error: "Missing required fields" });
+    if (!name || !source || (timeToClose === undefined || timeToClose === null)) {
+      return res.status(400).json({ error: "Missing required fields: name, source, and timeToClose are mandatory." });
     }
 
     const lead = new Lead({
