@@ -1,5 +1,20 @@
 const Lead = require("../models/Leads");
 
+const formatLeadResponse = (lead) => {
+  return {
+    id: lead._id,
+    name: lead.name,
+    source: lead.source,
+    salesAgent: lead.salesAgent,
+    status: lead.status,
+    tags: lead.tags,
+    timeToClose: lead.timeToClose,
+    priority: lead.priority,
+    createdAt: lead.createdAt,
+    updatedAt: lead.updatedAt,
+  };
+};
+
 const createLead = async (req, res) => {
   try {
     const { name, source, salesAgent, status, tags, timeToClose, priority } =
@@ -19,7 +34,12 @@ const createLead = async (req, res) => {
       priority,
     });
 
-    res.status(201).json(lead);
+    await lead.save();
+    
+    // Populate salesAgent before returning
+    const populatedLead = await Lead.findById(lead._id).populate("salesAgent", "name email").lean();
+    
+    res.status(201).json(formatLeadResponse(populatedLead));
   } catch (error) {
     if (error.name === "ValidationError") {
       return res.status(400).json({ error: error.message });
@@ -55,17 +75,7 @@ const getLeads = async (req, res) => {
       .sort({ createdAt: -1 })
       .lean(); 
 
-    const formatted = leads.map((lead) => ({
-      id: lead._id,
-      name: lead.name,
-      source: lead.source,
-      salesAgent: lead.salesAgent,
-      status: lead.status,
-      tags: lead.tags,
-      timeToClose: lead.timeToClose,
-      priority: lead.priority,
-      createdAt: lead.createdAt,
-    }));
+    const formatted = leads.map(formatLeadResponse);
 
     res.status(200).json(formatted);
   } catch (error) {
@@ -94,9 +104,8 @@ const updateLead = async (req, res) => {
     
     // We want to return the populated lead, same as getLeads
     const populatedLead = await Lead.findById(id).populate("salesAgent", "name email").lean();
-    populatedLead.id = populatedLead._id;
     
-    res.status(200).json(populatedLead);
+    res.status(200).json(formatLeadResponse(populatedLead));
   } catch (error) {
     if (error.name === "ValidationError") {
       return res.status(400).json({ error: error.message });

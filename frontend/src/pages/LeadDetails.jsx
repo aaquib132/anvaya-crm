@@ -285,10 +285,10 @@ function DetailItem({ label, value }) {
 function StatusBadge({ status }) {
   const map = {
     New: "bg-amber-100/80 text-amber-700 border-amber-200",
-    Contacted: "bg-brand-100/80 text-brand-700 border-brand-200",
+    Contacted: "bg-blue-100/80 text-blue-700 border-blue-200",
     Qualified: "bg-emerald-100/80 text-emerald-700 border-emerald-200",
     "Proposal Sent": "bg-purple-100/80 text-purple-700 border-purple-200",
-    Closed: "bg-gray-100/80 text-gray-700 border-gray-200"
+    Closed: "bg-indigo-100/80 text-indigo-700 border-indigo-200"
   };
   return (
     <span className={`inline-flex px-3 py-1 rounded-lg text-sm font-bold border shadow-sm ${map[status] || "bg-gray-100 text-gray-600 border-gray-200"}`}>

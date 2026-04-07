@@ -4,7 +4,7 @@ import Layout from "../components/Layout";
 import API from "../services/api";
 import {
   Plus, Clock, Phone, CheckCircle2,
-  X, User, Briefcase, AlertCircle, ChevronRight
+  X, User, Briefcase, AlertCircle, ChevronRight, Send, ShieldCheck
 } from "lucide-react";
 import LeadStatusChart from "../components/LeadStatusChart";
 import { useToast } from "../context/ToastContext";
@@ -47,6 +47,8 @@ export default function Dashboard() {
     new: leads.filter((l) => l.status === "New").length,
     contacted: leads.filter((l) => l.status === "Contacted").length,
     qualified: leads.filter((l) => l.status === "Qualified").length,
+    proposalSent: leads.filter((l) => l.status === "Proposal Sent").length,
+    closed: leads.filter((l) => l.status === "Closed").length,
   };
 
   if (loading) {
@@ -88,10 +90,12 @@ export default function Dashboard() {
         </div>
 
         {/* STATS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <StatCard title="New Leads" value={stats.new} icon={<Clock />} color="text-amber-500" bg="bg-amber-50" linkTo="/status/New" />
-          <StatCard title="Contacted" value={stats.contacted} icon={<Phone />} color="text-brand-500" bg="bg-brand-50" linkTo="/status/Contacted" />
-          <StatCard title="Qualified" value={stats.qualified} icon={<CheckCircle2 />} color="text-emerald-500" bg="bg-emerald-50" linkTo="/status/Qualified" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+          <StatCard title="New Leads" value={stats.new} icon={<Clock size={20} />} color="text-amber-500" bg="bg-amber-50" linkTo="/status/New" />
+          <StatCard title="Contacted" value={stats.contacted} icon={<Phone size={20} />} color="text-blue-500" bg="bg-blue-50" linkTo="/status/Contacted" />
+          <StatCard title="Qualified" value={stats.qualified} icon={<CheckCircle2 size={20} />} color="text-emerald-500" bg="bg-emerald-50" linkTo="/status/Qualified" />
+          <StatCard title="Proposal Sent" value={stats.proposalSent} icon={<Send size={20} />} color="text-purple-500" bg="bg-purple-50" linkTo="/status/Proposal%20Sent" />
+          <StatCard title="Closed" value={stats.closed} icon={<ShieldCheck size={20} />} color="text-indigo-500" bg="bg-indigo-50" linkTo="/status/Closed" />
         </div>
 
         {/* CHART + SUMMARY */}
@@ -104,8 +108,10 @@ export default function Dashboard() {
             <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-6">Pipeline Summary</h2>
             <div className="space-y-6 flex-1">
               <SummaryRow label="New Leads" value={stats.new} total={leads.length} color="bg-amber-400" />
-              <SummaryRow label="Contacted" value={stats.contacted} total={leads.length} color="bg-brand-400" />
+              <SummaryRow label="Contacted" value={stats.contacted} total={leads.length} color="bg-blue-400" />
               <SummaryRow label="Qualified" value={stats.qualified} total={leads.length} color="bg-emerald-400" />
+              <SummaryRow label="Proposal Sent" value={stats.proposalSent} total={leads.length} color="bg-purple-400" />
+              <SummaryRow label="Closed" value={stats.closed} total={leads.length} color="bg-indigo-400" />
             </div>
             <div className="mt-6 pt-6 border-t border-gray-100/50">
                <div className="flex justify-between items-end">
@@ -120,7 +126,7 @@ export default function Dashboard() {
         <div className="glass-card overflow-hidden">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 border-b border-white/50 bg-white/20 gap-4">
             <div className="flex gap-2 p-1 bg-gray-100/50 backdrop-blur-md rounded-xl overflow-x-auto w-full sm:w-auto">
-              {["All", "New", "Contacted", "Qualified"].map((f) => (
+              {["All", "New", "Contacted", "Qualified", "Proposal Sent", "Closed"].map((f) => (
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
@@ -231,8 +237,10 @@ function SummaryRow({ label, value, total, color }) {
 function StatusBadge({ status }) {
   const map = {
     New: "bg-amber-100/80 text-amber-700 border-amber-200",
-    Contacted: "bg-brand-100/80 text-brand-700 border-brand-200",
+    Contacted: "bg-blue-100/80 text-blue-700 border-blue-200",
     Qualified: "bg-emerald-100/80 text-emerald-700 border-emerald-200",
+    "Proposal Sent": "bg-purple-100/80 text-purple-700 border-purple-200",
+    Closed: "bg-indigo-100/80 text-indigo-700 border-indigo-200",
   };
   return (
     <span className={`px-3 py-1 rounded-full text-xs font-bold border ${map[status] || "bg-gray-100 text-gray-600 border-gray-200"}`}>
@@ -306,6 +314,7 @@ function Modal({ agents, setLeads, close }) {
              <div className="relative">
                 <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <select name="salesAgent" className="w-full border border-gray-200/50 bg-white/50 pl-10 pr-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none appearance-none transition-shadow">
+                  <option value="">Unassigned</option>
                   {agents.map((a) => (
                     <option key={a._id} value={a._id}>{a.name}</option>
                   ))}

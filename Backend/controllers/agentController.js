@@ -1,5 +1,15 @@
 const SalesAgent = require("../models/SalesAgent");
 
+const formatAgentResponse = (agent) => {
+  return {
+    id: agent._id,
+    name: agent.name,
+    email: agent.email,
+    createdAt: agent.createdAt,
+    updatedAt: agent.updatedAt,
+  };
+};
+
 const createAgent = async (req, res) => {
   try {
     const { name, email } = req.body;
@@ -21,7 +31,7 @@ const createAgent = async (req, res) => {
     const agent = new SalesAgent({ name, email });
     await agent.save();
 
-    res.status(201).json(agent);
+    res.status(201).json(formatAgentResponse(agent));
 
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -32,7 +42,7 @@ const getAgents = async (req, res) => {
   try {
     const agents = await SalesAgent.find().sort({ createdAt: -1 });
 
-    res.status(200).json(agents);
+    res.status(200).json(agents.map(formatAgentResponse));
 
   } catch (error) {
     res.status(500).json({ error: error.message });

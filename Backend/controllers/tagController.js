@@ -1,5 +1,14 @@
 const Tag = require("../models/Tag");
 
+const formatTagResponse = (tag) => {
+  return {
+    id: tag._id,
+    name: tag.name,
+    createdAt: tag.createdAt,
+    updatedAt: tag.updatedAt,
+  };
+};
+
 const createTag = async (req, res) => {
   try {
     const { name } = req.body;
@@ -23,7 +32,7 @@ const createTag = async (req, res) => {
     const tag = new Tag({ name: normalized });
     await tag.save();
 
-    res.status(201).json(tag);
+    res.status(201).json(formatTagResponse(tag));
 
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -34,7 +43,7 @@ const getTags = async (req, res) => {
   try {
     const tags = await Tag.find().sort({ createdAt: -1 });
 
-    res.status(200).json(tags);
+    res.status(200).json(tags.map(formatTagResponse));
 
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -7,9 +7,11 @@ import {
 } from "recharts";
 
 const CHART_COLORS = {
-  New: "#3b82f6",       
-  Contacted: "#f59e0b", 
-  Qualified: "#22c55e", 
+  New: "#f59e0b",          // Amber (Matches bg-amber-400)
+  Contacted: "#3b82f6",    // Brand/Blue (Matches bg-brand-400)
+  Qualified: "#10b981",    // Emerald (Matches bg-emerald-400)
+  ProposalSent: "#a855f7", // Purple (Matches bg-purple-400)
+  Closed: "#6366f1",       // Indigo (Matches bg-indigo-400)
 };
 
 // 🔥 MOVED OUTSIDE: Declare the tooltip component outside of the main component
@@ -39,6 +41,8 @@ export default function LeadStatusChart({ stats }) {
     { name: "New", value: stats.new, color: CHART_COLORS.New },
     { name: "Contacted", value: stats.contacted, color: CHART_COLORS.Contacted },
     { name: "Qualified", value: stats.qualified, color: CHART_COLORS.Qualified },
+    { name: "Proposal Sent", value: stats.proposalSent, color: CHART_COLORS.ProposalSent },
+    { name: "Closed", value: stats.closed, color: CHART_COLORS.Closed },
   ];
 
   const totalLeads = data.reduce((sum, item) => sum + item.value, 0);
