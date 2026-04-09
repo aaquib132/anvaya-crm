@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../components/Layout";
 import API from "../services/api";
-import { Users, Plus, X, Mail, Phone, ExternalLink } from "lucide-react";
+import { Users, Plus, X, Mail, ExternalLink } from "lucide-react";
 import { useToast } from "../context/ToastContext";
 
 export default function Agents() {
@@ -130,10 +130,10 @@ export default function Agents() {
                 </div>
                 
                 <div className="pt-4 flex gap-3">
-                   <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-colors">
+                   <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-colors cursor-pointer">
                       Cancel
                    </button>
-                   <button type="submit" className="flex-1 bg-brand-600 text-white py-3 rounded-xl font-bold hover:bg-brand-700 shadow-md transition-all active:scale-[0.98]">
+                   <button type="submit" className="flex-1 bg-brand-600 text-white py-3 rounded-xl font-bold hover:bg-brand-700 shadow-md transition-all active:scale-[0.98] cursor-pointer">
                      Create Agent
                    </button>
                 </div>

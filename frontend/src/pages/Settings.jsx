@@ -4,6 +4,7 @@ import { Settings as SettingsIcon, Bell, Shield, User, Smartphone, Globe, Cloud,
 import API from "../services/api";
 import { useToast } from "../context/ToastContext";
 import ConfirmModal from "../components/ConfirmModal";
+
 export default function Settings() {
   const [avatar, setAvatar] = useState(null);
   const fileInputRef = useRef(null);
@@ -11,7 +12,7 @@ export default function Settings() {
   const [agents, setAgents] = useState([]);
   const [leads, setLeads] = useState([]);
 
-  // Modal State
+
   const [confirmDelete, setConfirmDelete] = useState({ isOpen: false, type: null, id: null });
   const { showToast } = useToast();
 
@@ -44,7 +45,6 @@ export default function Settings() {
   const handleAvatarSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Create local preview URL
       const url = URL.createObjectURL(file);
       setAvatar(url);
     }
@@ -154,7 +154,7 @@ export default function Settings() {
          </div>
 
          {/* Data Management Section */}
-         <div className="glass-card overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60">
+         <div className="glass-card mt-8 overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60">
             <div className="px-8 py-5 border-b border-gray-100/60 bg-white/40 flex items-center gap-2">
               <Database className="w-5 h-5 text-brand-600" />
               <h2 className="text-xl font-bold text-gray-900">Data Management</h2>

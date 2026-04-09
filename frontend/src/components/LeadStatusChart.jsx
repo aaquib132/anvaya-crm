@@ -7,14 +7,13 @@ import {
 } from "recharts";
 
 const CHART_COLORS = {
-  New: "#f59e0b",          // Amber (Matches bg-amber-400)
-  Contacted: "#3b82f6",    // Brand/Blue (Matches bg-brand-400)
-  Qualified: "#10b981",    // Emerald (Matches bg-emerald-400)
-  ProposalSent: "#a855f7", // Purple (Matches bg-purple-400)
-  Closed: "#6366f1",       // Indigo (Matches bg-indigo-400)
+  New: "#f59e0b",       
+  Contacted: "#3b82f6",    
+  Qualified: "#10b981",    
+  ProposalSent: "#a855f7",
+  Closed: "#6366f1",      
 };
 
-// 🔥 MOVED OUTSIDE: Declare the tooltip component outside of the main component
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
@@ -53,7 +52,7 @@ export default function LeadStatusChart({ stats }) {
         Lead Distribution
       </h2>
 
-      <div className="relative flex-1 min-h-[200px] h-[250px] w-full">
+      <div className="relative flex-1 min-h-50 h-62.5 w-full">
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
           <span className="text-3xl font-bold text-gray-900 leading-none">{totalLeads}</span>
           <span className="text-xs font-medium text-gray-400 mt-1 uppercase tracking-wide">Total Leads</span>
@@ -80,8 +79,7 @@ export default function LeadStatusChart({ stats }) {
                 />
               ))}
             </Pie>
-            
-            {/* Pass the component as the content prop */}
+        
             <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
             
           </PieChart>

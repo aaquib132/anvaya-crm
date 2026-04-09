@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import API from "../services/api";
 import {
@@ -107,7 +107,7 @@ export default function Leads() {
         {/* CONTROLS */}
         <div className="glass-card mb-6 p-4">
            <div className="flex flex-wrap gap-4 items-center justify-between">
-              <div className="flex-1 min-w-[200px] relative">
+              <div className="flex-1 min-w-50 relative">
                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                  <input
                     type="text"
@@ -142,7 +142,7 @@ export default function Leads() {
                       onChange={(e) => setAgentFilter(e.target.value)}
                     >
                       <option value="All">All Agents</option>
-                      {agents.map(a => <option key={a._id} value={a._id}>{a.name}</option>)}
+                       {agents.map(a => <option key={a.id || a._id} value={a.id || a._id}>{a.name}</option>)}
                     </select>
                  </div>
 
@@ -264,6 +264,7 @@ function PriorityBadge({ priority }) {
 
 function Modal({ agents, setLeads, close }) {
   const [tags, setTags] = useState([]);
+  const { showToast } = useToast();
   useEffect(() => {
     API.get("/tags").then((res) => setTags(res.data)).catch(console.error);
   }, []);
@@ -311,7 +312,7 @@ function Modal({ agents, setLeads, close }) {
           </div>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Lead Source</label>
-            <select name="source" className="w-full border border-gray-200/50 bg-white/50 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-shadow">
+            <select name="source" className="w-full cursor-pointer border border-gray-200/50 bg-white/50 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-shadow">
                <option>Website</option>
                <option>Referral</option>
                <option>Social Media</option>
@@ -324,12 +325,12 @@ function Modal({ agents, setLeads, close }) {
           </div>
           <div>
              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Assign Agent</label>
-             <div className="relative">
+             <div className="relative cursor-pointer">
                 <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <select name="salesAgent" className="w-full border border-gray-200/50 bg-white/50 pl-10 pr-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none appearance-none transition-shadow">
+                <select name="salesAgent" className="w-full cursor-pointer border border-gray-200/50 bg-white/50 pl-10 pr-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none appearance-none transition-shadow">
                   <option value="">Unassigned</option>
-                  {agents.map((a) => (
-                    <option key={a._id} value={a._id}>{a.name}</option>
+                   {agents.map((a) => (
+                    <option key={a.id || a._id} value={a.id || a._id}>{a.name}</option>
                   ))}
                 </select>
              </div>
@@ -337,7 +338,7 @@ function Modal({ agents, setLeads, close }) {
           <div className="grid grid-cols-2 gap-4">
              <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Priority</label>
-                <select name="priority" className="w-full border border-gray-200/50 bg-white/50 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-shadow">
+                <select name="priority" className="w-full cursor-pointer border border-gray-200/50 bg-white/50 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-shadow">
                   <option>High</option>
                   <option>Medium</option>
                   <option>Low</option>
@@ -345,7 +346,7 @@ function Modal({ agents, setLeads, close }) {
              </div>
              <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Status</label>
-                <select name="status" className="w-full border border-gray-200/50 bg-white/50 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-shadow">
+                <select name="status" className="w-full cursor-pointer border border-gray-200/50 bg-white/50 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-shadow">
                   <option>New</option>
                   <option>Contacted</option>
                   <option>Qualified</option>
@@ -360,16 +361,16 @@ function Modal({ agents, setLeads, close }) {
           </div>
           <div>
              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Tags</label>
-             <select name="tags" multiple className="w-full border border-gray-200/50 bg-white/50 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-shadow h-24">
-               {tags.map((t) => <option key={t._id} value={t.name}>{t.name}</option>)}
+             <select name="tags" multiple className="w-full cursor-pointer border border-gray-200/50 bg-white/50 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-shadow h-24">
+                {tags.map((t) => <option key={t.id || t._id} value={t.name}>{t.name}</option>)}
              </select>
              <p className="text-xs text-gray-400 mt-1">Hold Ctrl (or Cmd) to select multiple tags</p>
           </div>
           <div className="pt-4 flex gap-3">
-             <button type="button" onClick={close} className="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-colors">
+             <button type="button" onClick={close} className="flex-1 px-4 py-3 cursor-pointer rounded-xl border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-colors">
                 Cancel
              </button>
-             <button type="submit" className="flex-1 bg-brand-600 text-white py-3 rounded-xl font-bold hover:bg-brand-700 shadow-md transition-all active:scale-[0.98]">
+             <button type="submit" className="flex-1 bg-brand-600 text-white py-3 cursor-pointer rounded-xl font-bold hover:bg-brand-700 shadow-md transition-all active:scale-[0.98]">
                Create Lead
              </button>
           </div>

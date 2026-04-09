@@ -17,7 +17,7 @@ export default function Reports() {
 
   // 1. Pipeline vs Closed
   const closedVsPipelineData = useMemo(() => {
-    const closed = leads.filter(l => l.status === "Closed" || l.status === "Qualified").length; // assuming Qualified acts as closed/won for demo if no closed, maybe add closed if needed
+    const closed = leads.filter(l => l.status === "Closed" || l.status === "Qualified").length; 
     const pipeline = leads.length - closed;
     return [
       { name: "In Pipeline", value: pipeline },
@@ -80,7 +80,7 @@ export default function Reports() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           
           {/* Pie Chart: Pipeline vs Closed */}
-          <div className="glass-card p-6 flex flex-col h-[400px]">
+          <div className="glass-card p-6 flex flex-col h-100">
             <div className="flex items-center gap-2 mb-6">
                <PieChartIcon className="w-5 h-5 text-brand-600"/>
                <h3 className="text-lg font-bold text-gray-900">Pipeline vs Closed</h3>
@@ -109,7 +109,7 @@ export default function Reports() {
           </div>
 
           {/* Pie/Bar Chart: Status Distribution */}
-          <div className="glass-card p-6 flex flex-col h-[400px]">
+          <div className="glass-card p-6 flex flex-col h-100">
             <div className="flex items-center gap-2 mb-6">
                <TrendingUp className="w-5 h-5 text-amber-500"/>
                <h3 className="text-lg font-bold text-gray-900">Status Distribution</h3>
@@ -136,7 +136,7 @@ export default function Reports() {
           </div>
 
           {/* Bar Chart: Leads by Agent */}
-          <div className="glass-card p-6 flex flex-col h-[420px] lg:col-span-2">
+          <div className="glass-card p-6 flex flex-col h-105 lg:col-span-2">
             <div className="flex items-center gap-2 mb-6">
                <BarChart3 className="w-5 h-5 text-indigo-500"/>
                <h3 className="text-lg font-bold text-gray-900">Lead Performance by Agent</h3>

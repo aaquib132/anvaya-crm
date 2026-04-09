@@ -1,4 +1,3 @@
-import React from "react";
 import { AlertCircle, X } from "lucide-react";
 
 export default function ConfirmModal({ isOpen, onClose, onConfirm, title, message, confirmText = "Confirm", type = "danger" }) {

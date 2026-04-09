@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import API from "../services/api";
 import { 
-  ArrowLeft, Briefcase, Filter, ChevronRight, AlertCircle, Clock, User, BarChart
+ Briefcase, ChevronRight, AlertCircle, Clock, User, BarChart
 } from "lucide-react";
 
 export default function StatusView() {
@@ -81,8 +81,6 @@ export default function StatusView() {
   return (
     <Layout>
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 max-w-6xl mx-auto">
-        
-        {/* Top Header matching wireframe "Leads by Status" */}
         <div className="mb-8 p-6 glass-card border border-brand-200/50 bg-white/40 shadow-sm rounded-3xl">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight flex items-center gap-3">
              <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-600 to-indigo-500">Leads by Status</span>
@@ -90,10 +88,7 @@ export default function StatusView() {
         </div>
 
         <div className="flex flex-col gap-8">
-          
-          {/* Main Area: Lead List by Status */}
-          <div className="flex-1 space-y-6">
-            
+          <div className="flex-1 space-y-6">         
             <div className="glass-card p-0 overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60">
                
                {/* Status Header */}

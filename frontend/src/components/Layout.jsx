@@ -32,7 +32,7 @@ function MobileNavLink({ to, icon, label }) {
     <NavLink
        to={to}
        className={({ isActive }) =>
-         `flex flex-col items-center justify-center p-2 min-w-[64px] transition-all duration-300 ${
+         `flex flex-col items-center justify-center p-2 min-w-16 transition-all duration-300 ${
            isActive
              ? "text-brand-600 scale-110"
              : "text-gray-400"

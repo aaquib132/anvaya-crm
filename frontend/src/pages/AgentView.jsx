@@ -94,8 +94,6 @@ export default function AgentView() {
   return (
     <Layout>
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 max-w-6xl mx-auto">
-        
-        {/* Top Header matching wireframe "Leads by Sales Agent" */}
         <div className="mb-8 p-6 glass-card border border-brand-200/50 bg-white/40 shadow-sm rounded-3xl">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight flex items-center gap-3">
              <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-600 to-indigo-500">Leads by Sales Agent</span>
@@ -103,13 +101,9 @@ export default function AgentView() {
         </div>
 
         <div className="flex flex-col gap-8">
-          
-          {/* Main Area: Lead List by Agent */}
           <div className="flex-1 space-y-6">
             
             <div className="glass-card p-0 overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60">
-               
-               {/* Sales Agent Details Header */}
                <div className="px-8 py-6 border-b border-gray-100/60 bg-white/40 flex justify-between items-center backdrop-blur-md">
                  <h2 className="text-xl font-bold text-gray-900 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-linear-to-br from-brand-100 to-indigo-100 text-brand-600 flex items-center justify-center font-bold text-lg border border-white shadow-inner">

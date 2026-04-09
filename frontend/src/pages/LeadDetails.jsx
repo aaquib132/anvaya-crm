@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import API from "../services/api";
 import { 
-  ArrowLeft, User, Users, Briefcase, Mail, Phone, Calendar, Clock, AlertTriangle, MessageSquare, Send, Check
+  User,  Briefcase,  Clock,  MessageSquare, Send, Check
 } from "lucide-react";
 import { useToast } from "../context/ToastContext";
 
 export default function LeadDetails() {
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const [lead, setLead] = useState(null);
   const [comments, setComments] = useState([]);
@@ -24,7 +23,7 @@ export default function LeadDetails() {
     API.get(`/leads`).then(res => {
       const found = res.data.find(l => (l._id === id || l.id === id));
       setLead(found);
-      setEditForm(found); // Initialize form
+      setEditForm(found); 
     });
 
     API.get(`/leads/${id}/comments`).then(res => {
@@ -53,8 +52,8 @@ export default function LeadDetails() {
       const res = await API.get(`/leads/${id}/comments`);
       setComments(res.data);
       showToast("Comment added successfully!");
-    } catch (e) {
-      showToast("Failed to add comment.", "error");
+    } catch {
+      showToast("Failed to add comment.", "error", );
     }
   };
 
@@ -202,7 +201,7 @@ export default function LeadDetails() {
                 <h2 className="text-xl font-bold text-gray-900">Comments Section</h2>
               </div>
 
-              <div className="flex-1 max-h-[400px] overflow-y-auto p-8 space-y-6 bg-gray-50/30">
+              <div className="flex-1 max-h-100 overflow-y-auto p-8 space-y-6 bg-gray-50/30">
                 {comments.length === 0 ? (
                    <div className="flex flex-col items-center justify-center py-12 text-gray-400">
                       <MessageSquare className="w-12 h-12 mb-3 opacity-20" />
@@ -210,9 +209,9 @@ export default function LeadDetails() {
                    </div>
                 ) : (
                   comments.map((c, idx) => (
-                    <div key={c._id || Math.random()} className="relative pl-6">
+                    <div key={c._id} className="relative pl-6">
                       {idx !== comments.length - 1 && (
-                        <div className="absolute top-8 bottom-[-24px] left-2.5 w-0.5 bg-brand-200/60"></div>
+                        <div className="absolute top-8 -bottom-6 left-2.5 w-0.5 bg-brand-200/60"></div>
                       )}
                       
                       <div className="absolute top-1 left-0 w-5 h-5 rounded-full bg-brand-100 flex items-center justify-center border-2 border-white shadow-sm">
@@ -250,7 +249,7 @@ export default function LeadDetails() {
                   <div className="flex gap-3">
                     <textarea
                       placeholder="Add a new comment..."
-                      className="flex-1 border border-gray-200 bg-white rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-brand-500 min-h-[60px] max-h-[150px] outline-none resize-y shadow-inner"
+                      className="flex-1 border border-gray-200 bg-white rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-brand-500 min-h-15 max-h-37.5 outline-none resize-y shadow-inner"
                       value={text}
                       onChange={(e) => setText(e.target.value)}
                     />

@@ -20,7 +20,6 @@ const createAgent = async (req, res) => {
       });
     }
 
-    // check duplicate email
     const existing = await SalesAgent.findOne({ email });
     if (existing) {
       return res.status(409).json({
@@ -53,7 +52,6 @@ const deleteAgent = async (req, res) => {
   try {
     const { id } = req.params;
     
-    // Unassign leads from this agent first
     const Lead = require("../models/Leads");
     await Lead.updateMany({ salesAgent: id }, { salesAgent: null });
 

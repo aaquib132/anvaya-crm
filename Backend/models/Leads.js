@@ -23,7 +23,7 @@ const leadSchema = new mongoose.Schema(
     salesAgent: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "SalesAgent",
-      required: false, // Allow unassigned leads
+      required: false, 
     },
     status: {
       type: String,
@@ -51,8 +51,6 @@ const leadSchema = new mongoose.Schema(
 );
 
 leadSchema.pre("save", function () {
-  this.updatedAt = Date.now();
-
   if (this.status === "Closed" && !this.closedAt) {
     this.closedAt = Date.now();
   }

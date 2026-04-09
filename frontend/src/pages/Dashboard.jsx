@@ -251,6 +251,7 @@ function StatusBadge({ status }) {
 
 function Modal({ agents, setLeads, close }) {
   const [tags, setTags] = useState([]);
+  const { showToast } = useToast();
   useEffect(() => {
     API.get("/tags").then((res) => setTags(res.data)).catch(console.error);
   }, []);
@@ -316,7 +317,7 @@ function Modal({ agents, setLeads, close }) {
                 <select name="salesAgent" className="w-full border border-gray-200/50 bg-white/50 pl-10 pr-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none appearance-none transition-shadow">
                   <option value="">Unassigned</option>
                   {agents.map((a) => (
-                    <option key={a._id} value={a._id}>{a.name}</option>
+                    <option key={a.id || a._id} value={a.id || a._id}>{a.name}</option>
                   ))}
                 </select>
              </div>
@@ -347,8 +348,8 @@ function Modal({ agents, setLeads, close }) {
           </div>
           <div>
              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Tags</label>
-             <select name="tags" multiple className="w-full border border-gray-200/50 bg-white/50 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-shadow h-24">
-               {tags.map((t) => <option key={t._id} value={t.name}>{t.name}</option>)}
+             <select name="tags" multiple className="w-full border border-gray-200/50 bg-white/50 px-4 py-2.5 cursor-pointer rounded-xl focus:ring-2 focus:ring-brand-500 outline-none transition-shadow h-24">
+               {tags.map((t) => <option key={t.id || t._id} value={t.name}>{t.name}</option>)}
              </select>
              <p className="text-xs text-gray-400 mt-1">Hold Ctrl (or Cmd) to select multiple tags</p>
           </div>

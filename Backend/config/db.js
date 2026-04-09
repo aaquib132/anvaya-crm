@@ -6,14 +6,11 @@ const initializeDatabase = async () => {
     if (!uri) {
       throw new Error("MONGODB_URI is not defined in .env");
     }
-    const host = uri.split("@")[1]?.split("/")[0] || "Unknown Host";
-    console.log(`🔄 Attempting to connect to MongoDB Atlas (${host})...`);
-
     await mongoose.connect(uri);
 
-    console.log("✅ MongoDB Connected Successfully");
+    console.log("MongoDB Connected Successfully");
   } catch (error) {
-    console.error("❌ Database connection failed:", error.message);
+    console.error("Database connection failed:", error.message);
     process.exit(1);
   }
 };
